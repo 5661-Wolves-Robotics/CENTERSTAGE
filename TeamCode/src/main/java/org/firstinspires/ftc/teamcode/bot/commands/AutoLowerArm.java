@@ -13,12 +13,14 @@ public class AutoLowerArm extends CommandBase {
     public AutoLowerArm(DualLinearSlide slide, ClawArm clawArm){
         m_slide = slide;
         m_clawArm = clawArm;
-        addRequirements(slide, clawArm);
+
+        addRequirements(clawArm);
     }
 
     @Override
     public void execute() {
-        if(m_slide.getPosition() <= 850 && m_clawArm.getArmState() != ClawArm.ArmState.LOWERED)
+        if(m_slide.getPosition() <= 860){
             m_clawArm.setArmState(ClawArm.ArmState.LOWERED);
+        }
     }
 }

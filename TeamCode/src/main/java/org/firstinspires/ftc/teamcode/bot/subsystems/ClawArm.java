@@ -4,15 +4,21 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.util.servo.ToggleServo;
+
+import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
+
 public class ClawArm extends SubsystemBase {
 
     private final Servo m_armServo;
-    private final Servo m_clawServo;
+    private final ToggleServo m_clawServo;
+    private final IntSupplier m_slidePos;
 
     public enum ArmState{
-        RAISED(0.3),
-        STORED(0.22),
-        LOWERED(0.16);
+        RAISED(0.38),
+        STORED(0.295),
+        LOWERED(0.21);
 
         private final double pos;
         ArmState(double pos){
@@ -26,28 +32,12 @@ public class ClawArm extends SubsystemBase {
 
     private ArmState armState = ArmState.STORED;
 
-    public enum ClawState{
-        CLOSED(0.0),
-        OPEN(0.21);
-
-        private final double pos;
-        ClawState(double pos){
-            this.pos = pos;
-        }
-
-        double getValue(){
-            return pos;
-        }
-    }
-
-    private ClawState clawState = ClawState.OPEN;
-
-    public ClawArm(HardwareMap hardwareMap, String armServo, String clawServo){
+    public ClawArm(HardwareMap hardwareMap, String armServo, String clawServo, IntSupplier slidePos){
         m_armServo = hardwareMap.get(Servo.class, armServo);
-        m_clawServo = hardwareMap.get(Servo.class, clawServo);
+        m_clawServo = new ToggleServo(hardwareMap.get(Servo.class, clawServo), 0.17 /*OPEN*/, 0.11 /*CLOSED*/, true, true);
+        m_slidePos = slidePos;
 
         setArmState(armState);
-        setClawState(clawState);
     }
 
     public void setArmState(ArmState state){
@@ -59,21 +49,22 @@ public class ClawArm extends SubsystemBase {
         return armState;
     }
 
-    public void setClawState(ClawState state){
-        clawState = state;
-        m_clawServo.setPosition(state.getValue());
-    }
-
-    public ClawState getClawState() {
-        return clawState;
-    }
-
     public void open(){
-        setClawState(ClawState.OPEN);
+        m_clawServo.setState(true);
     }
 
     public void close(){
-        setClawState(ClawState.CLOSED);
+        m_clawServo.setState(false);
     }
 
+    public void toggleClaw(){
+        m_clawServo.toggle();
+    }
+
+    @Override
+    public void periodic() {
+        if(m_slidePos.getAsInt() <= 830){
+            setArmState(ArmState.STORED);
+        }
+    }
 }

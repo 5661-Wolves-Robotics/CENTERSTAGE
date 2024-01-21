@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.drive.FieldConstants;
 import org.firstinspires.ftc.teamcode.drive.Mecanum;
 import org.firstinspires.ftc.teamcode.opencv.pipeline.CenterStagePipeline;
 
-public class DriveToProp extends CommandBase {
+public class DriveToBoard extends CommandBase {
 
     private final Mecanum m_drive;
     private final CenterstageVision m_cv;
@@ -18,7 +18,7 @@ public class DriveToProp extends CommandBase {
     private final FieldConstants.Side m_side;
     private final FieldConstants.Stage m_stage;
 
-    public DriveToProp(
+    public DriveToBoard(
             MecanumDriveBase driveBase,
             CenterstageVision cv,
             FieldConstants.Side side,
@@ -49,45 +49,59 @@ public class DriveToProp extends CommandBase {
         if(m_stage == FieldConstants.Stage.BACK) {
             switch (propPos) {
                 case LEFT:
-                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate())
-                            .splineTo(new Vector2d(9, -35 * yScale), Math.toRadians(180))
+                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate(), true)
+                            .back(3)
+                            .splineTo(new Vector2d(51, -29 * yScale), 0)
                             .build());
                     break;
                 case CENTER:
-                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate())
-                            .splineTo(new Vector2d(16, -34 * yScale), Math.toRadians(90 * yScale))
+                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate(), true)
+                            .back(3)
+                            .splineTo(new Vector2d(51, -36 * yScale), 0)
                             .build());
                     break;
                 case RIGHT:
-                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate())
-                            .lineToLinearHeading(new Pose2d(33, -35 * yScale, Math.toRadians(180)))
+                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate(), true)
+                            .splineToLinearHeading(new Pose2d(51, -44 * yScale, Math.toRadians(180)), Math.toRadians(270))
                             .build());
                     break;
             }
         } else {
             switch (propPos) {
                 case LEFT:
-                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate())
-                            .forward(20)
-                            .splineTo(new Vector2d(-45, -20 * yScale), yScale * Math.toRadians(270))
+                    m_drive.followTrajectorySequence(m_drive.trajectorySequenceBuilder(m_drive.getPoseEstimate())
+                            .setReversed(true)
+                            .back(7)
+                            .turn(-Math.toRadians(90))
+                            .lineTo(new Vector2d(30, -12 * yScale))
+                            .splineToLinearHeading(new Pose2d(51, -30 * yScale, Math.toRadians(180)), Math.toRadians(0))
                             .build());
                     break;
                 case CENTER:
-                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate())
-                            .lineToLinearHeading(new Pose2d(-42, -24 * yScale, 0))
+                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate(), true)
+                            .back(5)
+                            .splineTo(new Vector2d(-36, -12 * yScale), 0)
+                            .lineTo(new Vector2d(30, -12 * yScale))
+                            .splineToLinearHeading(new Pose2d(51, -36 * yScale, Math.toRadians(180)), Math.toRadians(0))
                             .build());
                     break;
                 case RIGHT:
-                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate())
-                            .splineTo(new Vector2d(-33, -35 * yScale), 0)
+                    m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate(), true)
+                            .back(5)
+                            .splineTo(new Vector2d(-24, -12 * yScale), 0)
+                            .lineTo(new Vector2d(30, -12 * yScale))
+                            .splineToLinearHeading(new Pose2d(51, -42 * yScale, Math.toRadians(180)), Math.toRadians(0))
                             .build());
                     break;
             }
         }
+        m_drive.followTrajectory(m_drive.trajectoryBuilder(m_drive.getPoseEstimate())
+                .back(6)
+                .build());
     }
 
     @Override
     public boolean isFinished() {
-        return !m_drive.isBusy();
+        return m_drive.done();
     }
 }

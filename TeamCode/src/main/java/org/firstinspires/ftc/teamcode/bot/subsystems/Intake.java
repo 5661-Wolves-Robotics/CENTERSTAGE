@@ -10,7 +10,7 @@ public class Intake extends SubsystemBase {
     private final Servo m_servo;
     private final DcMotorEx m_motor;
 
-    private final double POWER = 0.7;
+    private final double POWER = 0.95;
 
     public enum IntakeState{
         RAISED(0.66),
@@ -44,6 +44,10 @@ public class Intake extends SubsystemBase {
         m_motor.setPower(-POWER);
     }
 
+    public void push(){
+        m_motor.setPower(-0.6);
+    }
+
     public void power(){
         m_motor.setPower(POWER);
     }
@@ -54,6 +58,15 @@ public class Intake extends SubsystemBase {
 
     public IntakeState getState(){
         return state;
+    }
+
+    public void setPos(double pos){
+        m_servo.setPosition(pos);
+    }
+
+    public void raise(){
+        setState(IntakeState.RAISED);
+        stop();
     }
 
 }

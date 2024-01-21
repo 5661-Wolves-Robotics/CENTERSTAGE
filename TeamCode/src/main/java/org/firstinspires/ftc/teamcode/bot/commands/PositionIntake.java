@@ -4,24 +4,22 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.bot.subsystems.Intake;
 
-public class ToggleIntake extends CommandBase {
+public class PositionIntake extends CommandBase {
 
     private final Intake m_intake;
+    private final double POS;
 
-    public ToggleIntake(Intake intake){
+    public PositionIntake(Intake intake, double pos){
         m_intake = intake;
+        POS = pos;
+
         addRequirements(intake);
     }
 
     @Override
     public void initialize() {
-        if(m_intake.getState() == Intake.IntakeState.LOWERED){
-            m_intake.setState(Intake.IntakeState.RAISED);
-            m_intake.stop();
-        } else {
-            m_intake.setState(Intake.IntakeState.LOWERED);
-            m_intake.power();
-        }
+        m_intake.setPos(POS);
+        m_intake.power();
     }
 
     @Override
