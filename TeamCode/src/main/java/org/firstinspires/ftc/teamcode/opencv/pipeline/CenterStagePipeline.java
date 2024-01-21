@@ -24,7 +24,7 @@ public class CenterStagePipeline implements VisionProcessor {
     private Paint linePaint = new Paint();
 
     private final Point LEFT_RECT_P = new Point(20, 330);
-    private final Point CENTER_RECT_P = new Point(320, 300);
+    private final Point CENTER_RECT_P = new Point(280, 320);
     private final Point RIGHT_RECT_P = new Point(580, 330);
 
     private final Rect LEFT_RECT = new Rect(

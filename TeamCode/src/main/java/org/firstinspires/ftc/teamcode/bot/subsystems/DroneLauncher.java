@@ -11,7 +11,7 @@ public class DroneLauncher extends SubsystemBase {
     private final ToggleServo m_servo;
 
     public DroneLauncher(HardwareMap hardwareMap, String servo){
-        m_servo = new ToggleServo(hardwareMap.get(Servo.class, servo), 0.5 /*LOADED*/, 0.0 /*FIRED*/, true, true);
+        m_servo = new ToggleServo(hardwareMap.get(Servo.class, servo), 0.5 /*LOADED*/, 0.1 /*FIRED*/, true, true);
     }
 
     public void launch(){

@@ -1,19 +1,17 @@
 package org.firstinspires.ftc.teamcode.bot.commands;
 
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.bot.subsystems.MecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.Mecanum;
+import org.firstinspires.ftc.teamcode.util.TrajectorySequenceSupplier;
 
-public class DriveTrajectory extends CommandBase {
+public class DriveTrajectorySequence extends CommandBase {
 
-    private final MecanumDriveBase m_driveBase;
     private final Mecanum m_drive;
-    private final Trajectory m_trajectory;
+    private final TrajectorySequenceSupplier m_trajectory;
 
-    public DriveTrajectory(MecanumDriveBase driveBase, Trajectory trajectory){
-        m_driveBase = driveBase;
+    public DriveTrajectorySequence(MecanumDriveBase driveBase, TrajectorySequenceSupplier trajectory){
         m_drive = driveBase.getDrive();
         m_trajectory = trajectory;
 
@@ -22,11 +20,11 @@ public class DriveTrajectory extends CommandBase {
 
     @Override
     public void initialize() {
-        m_drive.followTrajectory(m_trajectory);
+        m_drive.followTrajectorySequenceAsync(m_trajectory.getTrajectory(m_drive));
     }
 
     @Override
     public boolean isFinished() {
-        return !m_drive.isBusy();
+        return m_drive.done();
     }
 }

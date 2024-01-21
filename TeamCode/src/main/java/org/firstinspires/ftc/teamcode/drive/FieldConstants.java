@@ -10,11 +10,6 @@ public class FieldConstants {
     public static Pose2d RED_BOARD = new Pose2d(64, -36, 0);
     public static Pose2d BLUE_BOARD = new Pose2d(64, 36, 0);
 
-    public static Pose2d BLUE_BACKSTAGE_START = new Pose2d(12, 63, Math.toRadians(90));
-    public static Pose2d BLUE_FRONTSTAGE_START = new Pose2d(-36, 63, Math.toRadians(90));
-    public static Pose2d RED_BACKSTAGE_START = new Pose2d(12, -63, Math.toRadians(270));
-    public static Pose2d RED_FRONTSTAGE_START = new Pose2d(-36, -63, Math.toRadians(270));
-
     public static CollisionDomain collision = new CollisionDomain.Builder()
             .addColliders(new Box(RED_BOARD, 16, 24))
             .addColliders(new Box(BLUE_BOARD, 16, 24))
@@ -31,7 +26,11 @@ public class FieldConstants {
     }
 
     public static Pose2d getFieldStartPose(Side side, Stage stage){
-        return new Pose2d(stage == Stage.BACK ? 12 : -24, side == Side.RED ? -63 : 63, side == Side.RED ? Math.toRadians(90) : Math.toRadians(270));
+        return new Pose2d(
+                stage == Stage.BACK ? 12 : -36,
+                side == Side.RED ? -63 : 63,
+                side == Side.RED ? Math.toRadians(90) : Math.toRadians(270)
+        );
     }
 
     @FunctionalInterface

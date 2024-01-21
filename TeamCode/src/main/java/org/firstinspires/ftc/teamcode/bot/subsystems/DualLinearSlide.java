@@ -60,8 +60,12 @@ public class DualLinearSlide extends SubsystemBase {
         targetPosition = pos;
     }
 
+    private final int RANGE = 20;
+
     public boolean isBusy(){
-        return m_left.isBusy() || m_right.isBusy();
+        double right = m_right.getCurrentPosition() - targetPosition;
+        double left = m_left.getCurrentPosition() - targetPosition;
+        return (right > -RANGE && right < RANGE) || (left > -RANGE && left < RANGE);
     }
 
     private double lastTime = time.seconds();

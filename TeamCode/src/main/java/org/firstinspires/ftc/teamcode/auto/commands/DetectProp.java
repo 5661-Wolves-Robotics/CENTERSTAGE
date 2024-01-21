@@ -32,5 +32,6 @@ public class DetectProp extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_cv.storePropPosition(Collections.max(frequency.entrySet(), Map.Entry.comparingByValue()).getKey());
+        m_cv.cleanUp();
     }
 }

@@ -22,7 +22,7 @@ public class PushPixel extends CommandBase {
 
     @Override
     public void initialize() {
-        m_intake.reverse();
+        m_intake.push();
     }
 
     @Override
